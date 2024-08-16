@@ -1,0 +1,13 @@
+mvn clean compile
+mvn package
+mvn test
+
+Coverage report: target/site/jacoco/index.html
+
+the script runservice is customized for jdk > 8.
+start & stop service:
+./runservice start production
+./runservice stop
+logs:
+./logs/spring-example.log
+./logs/app.log

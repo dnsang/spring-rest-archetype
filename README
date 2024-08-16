@@ -1,0 +1,18 @@
+this archtype is generated automatically by using:
+mvn archetype:create-from-project
+check "https://www.baeldung.com/maven-archetype" for more.
+
+To install the archetype:
+mvn install
+To generate new project using this archetype:
+* interactive mode:*
+
+mvn archetype:generate
+
+* batch mode *
+ mvn archetype:generate -B -DarchetypeGroupId=scala 	\
+     -DarchetypeArtifactId=finatra-archetype 		\
+     -DarchetypeVersion=1.0 -DgroupId=company 		\
+     -DartifactId=projectx 							\
+     -Dpackage=company.projectx  				\
+     -DarchetypeCatalog=local
