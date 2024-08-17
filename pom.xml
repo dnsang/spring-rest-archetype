@@ -8,6 +8,8 @@
   <packaging>maven-archetype</packaging>
 
   <name>spring-rest-archetype</name>
+  <description>spring rest with embedded jetty</description>
+  <url>https://github.com/dnsang/spring-rest-archetype</url>
 
   <build>
     <extensions>
@@ -67,17 +69,6 @@
           <publishingServerId>central</publishingServerId>
         </configuration>
       </plugin>
-<!--      <plugin>-->
-<!--        <groupId>org.sonatype.plugins</groupId>-->
-<!--        <artifactId>nexus-staging-maven-plugin</artifactId>-->
-<!--        <version>1.7.0</version>-->
-<!--        <extensions>true</extensions>-->
-<!--        <configuration>-->
-<!--          <serverId>ossrh</serverId>-->
-<!--          <nexusUrl>https://s01.oss.sonatype.org/</nexusUrl>-->
-<!--          <autoReleaseAfterClose>true</autoReleaseAfterClose>-->
-<!--        </configuration>-->
-<!--      </plugin>-->
     </plugins>
 
     <pluginManagement>
@@ -90,27 +81,22 @@
     </pluginManagement>
   </build>
 
-<!--  <distributionManagement>-->
-<!--    <snapshotRepository>-->
-<!--      <id>ossrh</id>-->
-<!--      <url>https://s01.oss.sonatype.org/content/repositories/snapshots</url>-->
-<!--    </snapshotRepository>-->
-<!--    <repository>-->
-<!--      <id>ossrh</id>-->
-<!--      <url>https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/</url>-->
-<!--    </repository>-->
-<!--  </distributionManagement>-->
-
-
-  <description>spring rest with embedded jetty</description>
-
   <developers>
-    <developer />
+    <developer>
+      <name>Sang</name>
+      <email>hi@sang.dev</email>
+    </developer>
   </developers>
-
   <licenses>
-    <license />
+    <license>
+      <name>Apache License, Version 2.0</name>
+      <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+      <distribution>repo</distribution>
+    </license>
   </licenses>
-
-  <scm />
+  <scm>
+    <connection>scm:git:https://github.com/dnsang/spring-rest-archetype.git</connection>
+    <developerConnection>scm:git:https://github.com/dnsang/spring-rest-archetype.git</developerConnection>
+    <url>https://github.com/dnsang/spring-rest-archetype</url>
+  </scm>
 </project>
