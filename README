@@ -10,9 +10,10 @@ To generate new project using this archetype:
 mvn archetype:generate
 
 * batch mode *
- mvn archetype:generate -B -DarchetypeGroupId=scala 	\
-     -DarchetypeArtifactId=finatra-archetype 		\
-     -DarchetypeVersion=1.0 -DgroupId=company 		\
-     -DartifactId=projectx 							\
-     -Dpackage=company.projectx  				\
+ mvn archetype:generate -B -DarchetypeGroupId=dev.sang.archetype 	\
+     -DarchetypeArtifactId=spring-rest-archetype 		\
+     -DarchetypeVersion=0.1-SNAPSHOT \
+      -DgroupId=com.domain 		\
+     -DartifactId=project-x 							\
+     -Dpackage=com.domain.projectx  				\
      -DarchetypeCatalog=local

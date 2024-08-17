@@ -10,7 +10,7 @@
   <artifactId>${artifactId}</artifactId>
   <version>${version}</version>
   <name>${artifactId}</name>
-  <description>spring-web-sample</description>
+  <description>microservice with spring and jetty</description>
   <licenses>
     <license />
   </licenses>
