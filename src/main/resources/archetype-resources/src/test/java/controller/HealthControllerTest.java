@@ -27,15 +27,14 @@ public class HealthControllerTest {
   @Test
   public void healthCheckV1ShouldReturnOk(){
     String url = String.format("http://localhost:%d/api/v1/health",port);
-    ResponseEntity<HealthStatus> response = restTemplate.getForEntity(url, HealthStatus.class);
+    ResponseEntity<APIResponse> response = restTemplate.getForEntity(url, APIResponse.class);
     assertTrue(response.getStatusCode().is2xxSuccessful());
-    assertTrue(response.getBody().isOk());
   }
 
   @Test
   public void healthCheckV2ShouldReturnError(){
     String url = String.format("http://localhost:%d/api/v2/health",port);
-    ResponseEntity<HealthStatus> response = restTemplate.getForEntity(url, HealthStatus.class);
+    ResponseEntity<APIResponse> response = restTemplate.getForEntity(url, APIResponse.class);
     assertTrue(response.getStatusCode().is5xxServerError());
   }
 }

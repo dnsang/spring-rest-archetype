@@ -4,7 +4,7 @@ mvn test
 
 Coverage report: target/site/jacoco/index.html
 
-the script runservice is customized for jdk > 8.
+the script runservice is customized for jdk > 21.
 start & stop service:
 ./runservice start production
 ./runservice stop
