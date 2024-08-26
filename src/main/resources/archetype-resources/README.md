@@ -42,4 +42,4 @@ To run with maven in development mode
 mvn spring-boot:run -Dspring.profiles.active=development
 ```
 
-## 7.
+## 7. For development guide [Guideline](DEV-GUIDELINE.md)

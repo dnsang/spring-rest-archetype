@@ -1,119 +1,125 @@
-# RestAPI Response Format
+# Development Guideline
+## Overview
+This guideline provides a step-by-step guide on how to use the new archetype for creating a Spring Boot project. 
+It covers key aspects such as creating controllers, handling exceptions, and following best practices.
 
-Follow the google guide ```https://google.github.io/styleguide/jsoncstyleguide.xml```
+## Getting Started
+### 1. Creating a New Project
 
-Success Responses return `data` within the  http code 2xx range.
-Error Responses return `error` within the http code 3xx-5xx range.
-Note: The error response adheres to the RFC 9457 standard.
+To create a new project using the archetype, run the following Maven command:
 
-## 1. Success Response Example
-HTTP status 2xx
-```json
-{   
-    "status" : 200,
-    "data": { .... }
+```shell
+mvn archetype:generate -B -DarchetypeGroupId=dev.sang.archetype 	\
+-DarchetypeArtifactId=spring-rest-archetype 		\
+-DarchetypeVersion=0.1.1  \
+-DgroupId=com.example 		\
+-DartifactId=project 		  \
+-Dpackage=com.example.project	\
+-DarchetypeCatalog=remote
+```
+
+Replace groupId, artifactId and package with your desired name.
+
+### 2. Project Structure
+
+The generated project will follow the standard 3-layer architecture structure:
+
+```bash
+project/
+├── cmd/
+├── conf/
+├── src/
+│   ├── main/
+│   │   ├── java/
+│   │   │   └── com/example/project/
+│   │   │       ├── config/
+│   │   │       ├── controller/
+│   │   │           └── SampleItemController.java
+│   │   │       ├── service/
+│   │   │       ├── repository/
+│   │   │       └── exception/
+│   │   │           └── GlobalExceptionHandler.java
+│   │   │       └── domain/
+│   │   │       └── JettyWebserver.java
+│   │   │       └── Server.java
+│   │   └── resources/
+│   │       └── application.properties
+│   └── test/
+│       └── java/
+│   │   │   └── com/example/project/
+│   │   │       ├── controller/
+│   │   │       ├── service/
+│   │   │       ├── repository/
+
+```
+
+### 3.Creating a Controller
+#### 3.1. Defining a REST Controller
+Create a new controller in the controller package:
+
+```java
+package com.example.project.controller;
+
+@RestController
+@RequestMapping("/api/v1/item")
+public class SampleItemController {
+
+   @Autowired
+   SampleItemService itemService;
+
+   @GetMapping("/{id}")
+   public ResponseEntity<?> get(@PathVariable("id") int id) {      
+        return ResponseBuilder.ok(itemService.get(id));
+   }
+```
+
+### 4. Handling Exceptions
+
+To handle exceptions globally, take a look at GlobalExceptionHandler class:
+
+```java
+package com.example.myapp.exception;
+
+@ControllerAdvice
+public final class GlobalExceptionHandler {
+
+ @ExceptionHandler(Exception.class)
+ public ResponseEntity<?> handleException(Exception e){
+   return ResponseBuilder.internalError(e.getMessage());
+ }
+ 
+ @ExceptionHandler(ApplicationException.class)
+ public ResponseEntity<?> handleApplicationException(ApplicationException ex){
+  return ResponseBuilder.fail(HttpStatus.INTERNAL_SERVER_ERROR,ex.getErrorCode(), ex.getMessage());
+ }
 }
 ```
 
-## 2.Error Response Example
-HTTP status 3xx -> 5xx
-```json
-{
-    "status": 500,
-    "error": {
-      "code" : 500,
-      "message" : "string message here",
-      "detail" : "detail message here"
+# Exception Handling Guidelines
+
+**There are three ways to handle your custom exceptions:**
+
+1. **Create a Custom Exception Handler Class**  
+   Similar to the `GlobalExceptionHandler` class, you can create your own exception handler class to manage specific exceptions.
+
+2. **Reuse and Throw `ApplicationException`**  
+   In your code, you can reuse the `ApplicationException` class and throw new instances of it as needed.
+
+3. **Create a Custom Exception Class**  
+   Extend the `ApplicationException` class to create your custom exception:
+
+```java
+package com.example.project.exception;
+
+public class ItemNotFoundException extends ApplicationException {
+    public ItemNotFoundException(Long id) {
+        super(ServiceErrorCode.INTERNAL_SERVER_ERROR, "Item with ID " + id + " not found");
     }
 }
 ```
-## 3. RestAPI Example
-### a. Get a single item successful
-```shell
-curl -i -X GET "http://localhost:8080/api/v1/item/1"
-```
-```json
-{
-  "data":{
-    "id":1,
-    "name":"test",
-    "createdDate":"2024-08-26T14:31:16.360888"
-  },
-  "status":200}
-```
-### b. Get a single item failed
 
-HTTP/1.1 404 Not Found
-```json
-{
-  "status":404,
-  "error":{
-    "code":10404,
-    "message":"The requested resource could not be found."
-  }
-}
-```
+**Note:** Consider using `ApplicationException` with a detailed message for better clarity and consistency in error handling.
 
-### b. Get a list of items
-Http Method: Get
-Http Response: 200
-```json
-{
-    "data": { 
-        "currentItemCount": 10,
-        "itemsPerPage": 10,
-        "startIndex": 11,
-        "totalItems": 2700000, 
-        "items": [
-            { } 
-        ]
-    }
-}
-```
+### 5. API Response Format 
 
-### c. Create a new item
-Http Method: Post
-Http Response Code: 200/201
-
-```shell
-curl -i -X POST 'localhost:8080/api/v1/item' \
--H "Content-Type: application/json" \
--d '{  
-  "name": "Update Example Item"  
-}'
-```
-
-### d. Update an item
-
-Http Method: Patch
-Http Response Code: 200/204
-
-```shell
-curl -i -X PATCH 'localhost:8080/api/v1/item/1' \
--H "Content-Type: application/json" \
--d '{  
-  "name": "Update Example Item"  
-}'
-```
-
-
-### e. Create a new item or update if exist
-HTTP Method: Put
-HTTP Success Response Code: 200 or 204
-
-
-```shell
-curl -i -X PUT 'localhost:8080/api/v1/item/1' \
--H "Content-Type: application/json" \
--d '{  
-  "name": "Update Example Item"  
-}'
-```
-
-### f. Delete an item
-Http Method: Delete
-HTTP Success Response Code: 200 or 204
-
-```shell
-curl -i -X DELETE 'localhost:8080/api/v1/item/1'
-```
+[Response Format](RESPONSE-FORMAT.md)
