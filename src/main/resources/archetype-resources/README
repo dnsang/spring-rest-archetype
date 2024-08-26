@@ -1,13 +1,45 @@
-mvn clean compile
-mvn package
-mvn test
+# Getting Started Guide
 
-Coverage report: target/site/jacoco/index.html
+## 1.Build the Project
+Navigate to the project directory and build the project using Maven: (jdk 22)
+```bash
+mvn clean compile package
+```
 
-the script runservice is customized for jdk > 21.
-start & stop service:
+## 2. Check Test Coverage
+Review the test coverage report by opening the following file in your web browser:
+```bash
+open target/site/jacoco/index.html
+```
+
+## 3. Start & Stop
+### a. (MacOS) Install coreutils if it is not already installed
+```bash
+brew install coreutils
+```
+### b.Make the `runservice` script executable:
+```bash
+chmod +x runservice
+```
+### c.Start the service in production mode:
+```bash
 ./runservice start production
+```
+
+## 4.Verify Service Operation
+Ensure that your service is running by executing the following command:
+```bash
+curl -X GET localhost:8080/api/v1/health
+```
+## 5.Stop the service
+```bash
 ./runservice stop
-logs:
-./logs/spring-example.log
-./logs/app.log
+```
+
+## 6. Maven
+To run with maven in development mode
+```bash
+mvn spring-boot:run -Dspring.profiles.active=development
+```
+
+## 7.

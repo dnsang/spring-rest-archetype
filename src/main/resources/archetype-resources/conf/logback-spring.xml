@@ -1,14 +1,49 @@
 #set( $symbol_pound = '#' )
-#set( $symbol_dollar = '$' )
-#set( $symbol_escape = '\' )
-<?xml version="1.0" encoding="UTF-8"?>
+  #set( $symbol_dollar = '$' )
+  #set( $symbol_escape = '\' )
+  <?xml version="1.0" encoding="UTF-8"?>
 <configuration>
     <include resource="org/springframework/boot/logging/logback/defaults.xml" />
     <include resource="org/springframework/boot/logging/logback/file-appender.xml" />
-
     <logger name="org.springframework" level="ERROR" />
-    <logger name="com.innotech.sample" level="DEBUG" />
-    <root level="INFO">
-        <appender-ref ref="FILE" />
+    <!-- Define the rolling file appender -->
+    <appender name="ROLLING_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>logs/service.log</file> <!-- Path to the current log file -->
+        <!-- Define the rolling policy -->
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <fileNamePattern>logs/service-%d{yyyy-MM-dd}.%i.log</fileNamePattern> <!-- Pattern for rolled over files -->
+            <maxFileSize>10MB</maxFileSize> <!-- Maximum size before rolling over -->
+            <maxHistory>30</maxHistory> <!-- Number of archived files to keep -->
+        </rollingPolicy>
+
+        <!-- Define the encoder -->
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss} %-5level %logger{36} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <!-- Define the asynchronous appender that wraps the rolling file appender -->
+    <appender name="ASYNC_ROLLING_FILE" class="ch.qos.logback.classic.AsyncAppender">
+        <appender-ref ref="ROLLING_FILE" />
+        <queueSize>512</queueSize> <!-- Size of the queue for async logging -->
+        <discardingThreshold>0</discardingThreshold> <!-- Threshold for discarding log events -->
+        <includeCallerData>true</includeCallerData> <!-- Include caller data for debugging -->
+    </appender>
+
+    <!-- Set the root logger level and attach the asynchronous file appender -->
+    <root level="info">
+        <appender-ref ref="ASYNC_ROLLING_FILE" />
     </root>
+
+    <!-- Define the console appender -->
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss} %-5level %logger{36} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <!-- Define specific logger levels for name -->
+    <logger name="console" level="debug">
+        <appender-ref ref="CONSOLE"/>
+    </logger>
 </configuration>

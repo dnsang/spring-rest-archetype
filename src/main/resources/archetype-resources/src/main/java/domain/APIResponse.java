@@ -3,72 +3,56 @@
 #set( $symbol_escape = '\' )
 package ${package}.domain;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import ${package}.exception.ErrorCode;
+import ${package}.exception.ServiceErrorCode;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.eclipse.jetty.http.HttpStatus;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+
+/**
+ * Represents a standardized response for all API endpoints. This class provides a consistent
+ * structure for both successful and error responses across the API.
+ *
+ * <p>For successful responses, the structure typically includes:</p>
+ * <ul>
+ *   <li><strong>status:</strong> The HTTP status code representing success (e.g., 200 OK, 201 Created). </li>*
+ *   <li><strong>data:</strong> The data resulting from the request</li>
+ * </ul>
+ *
+ * <p>For error responses, the structure typically includes:</p>
+ * <ul>
+ *   <li><strong>status:</strong> The HTTP status code representing the error (e.g., 400 Bad Request, 500 Internal Server Error)</li>
+ *   <li><strong>error:</strong> An instance of {@link ErrorCode} detailing the internal error code.</li>
+ * </ul>
+ *
+ * @param <T> The type of the response data object.
+ * @Note: The error response adheres to the RFC 9457 standard.
+ ***/
 
 
 @Data
-@Builder
 @NoArgsConstructor
-@AllArgsConstructor
 public class APIResponse<T> {
 
-  @JsonIgnore
-  protected Integer httpStatus;
-  protected Error error;
+  int status;
   protected T data;
+  protected Error error;
 
-  public static <T> APIResponse<T> success(T data) {
-    return response(HttpStatus.OK_200, data, null, null);
-  }
-
-  public static <T> APIResponse<T> fail(Integer httpStatus, Integer internalErrorCode,
-      String message) {
-    return response(httpStatus, null, internalErrorCode, message);
-  }
-
-  public static <T> APIResponse<T> badRequest(Integer errorCode, String message) {
-    return fail(HttpStatus.BAD_REQUEST_400, errorCode, message);
-  }
-
-  public static <T> APIResponse<T> notFound(Integer errorCode, String message) {
-    return fail(HttpStatus.NOT_FOUND_404, errorCode, message);
-  }
-
-  public static <T> APIResponse<T> internalError(Integer errorCode, String message) {
-    return fail(HttpStatus.INTERNAL_SERVER_ERROR_500, errorCode, message);
-  }
-
-  public static <T> APIResponse response(int httpStatus, T data, Integer errorCode,
-      String errorMessage) {
-    if (HttpStatus.isSuccess(httpStatus)) {
-      return APIResponse.<T>builder()
-          .data(data)
-          .build();
-    } else {
-      return APIResponse.<T>builder()
-          .error(new Error(errorCode, errorMessage))
-          .build();
-    }
-
-  }
-
-  public ResponseEntity<APIResponse<T>> toResponseEntity() {
-    return ResponseEntity.status(this.getHttpStatus()).body(this);
-  }
-
-  @Builder
+  @Data
   @NoArgsConstructor
   @AllArgsConstructor
-  static
-  class Error {
+  static class Error {
 
-    protected int code;
-    protected String message;
+    int code;
+    String message;
+    String detail;
+  }
+
+  APIResponse(int status, T data, Error error) {
+    this.status = status;
+    this.data = data;
+    this.error = error;
   }
 }

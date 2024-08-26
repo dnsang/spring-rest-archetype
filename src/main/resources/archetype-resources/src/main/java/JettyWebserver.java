@@ -3,10 +3,12 @@
 #set( $symbol_escape = '\' )
 package ${package};
 
+import ${package}.config.Config;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 import org.eclipse.jetty.util.thread.QueuedThreadPool;
 import org.eclipse.jetty.util.thread.ThreadPool;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.embedded.jetty.JettyServletWebServerFactory;
 import org.springframework.boot.web.server.WebServerFactoryCustomizer;
@@ -31,14 +33,16 @@ public class JettyWebserver implements WebServerFactoryCustomizer<JettyServletWe
                 blockingQueue
         );
         factory.setThreadPool(threadPool);
-        String serverInfo = """
+        String serverInfoTemplate = """
                 =================== Jetty Server ==========
+                === port: %10d                    ===
                 === min thread: %10d              ===
                 === max thread: %10d              ===
                 === idle timeout: %10d            ===
                 === max queue size: %10d          ===
                 ===========================================
                 """;
-        System.out.println(String.format(serverInfo, minThread,maxThread, idleTimeout, maxQueueSize ));
+        String serverInfo =String.format(serverInfoTemplate, factory.getPort(), minThread, maxThread, idleTimeout, maxQueueSize);
+        LoggerFactory.getLogger("console").info(serverInfo);
     }
 }

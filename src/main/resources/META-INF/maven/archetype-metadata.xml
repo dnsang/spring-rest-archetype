@@ -40,6 +40,7 @@
         <include>README</include>
         <include>.gitignore</include>
         <include>runservice</include>
+        <include>RESPONSE-FORMAT.md</include>
       </includes>
     </fileSet>
   </fileSets>
