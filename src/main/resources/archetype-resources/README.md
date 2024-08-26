@@ -28,8 +28,8 @@ chmod +x runservice
 
 ## 4.Verify Service Operation
 Ensure that your service is running by executing the following command:
-```bash
-curl -X GET localhost:8080/api/v1/health
+```shell
+curl -X GET localhost:8080/api/v1/item/1
 ```
 ## 5.Stop the service
 ```bash
