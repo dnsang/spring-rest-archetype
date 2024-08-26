@@ -1,12 +1,13 @@
 # RestAPI Response Format
 
-Follow Google guide ```https://google.github.io/styleguide/jsoncstyleguide.xml```
+Follow the google guide ```https://google.github.io/styleguide/jsoncstyleguide.xml```
 
-Success Response return `data` with http code 2xx
-Error Response return `error` with http code 3xx-5xx
+Success Responses return `data` within the  http code 2xx range.
+Error Responses return `error` within the http code 3xx-5xx range.
+Note: The error response adheres to the RFC 9457 standard.
 
 ## 1. Success Response Example
-http status 2xx
+HTTP status 2xx
 ```json
 {   
     "status" : 200,
@@ -14,9 +15,8 @@ http status 2xx
 }
 ```
 
-
 ## 2.Error Response Example
-http status 3xx -> 5xx
+HTTP status 3xx -> 5xx
 ```json
 {
     "status": 500,
@@ -27,7 +27,7 @@ http status 3xx -> 5xx
     }
 }
 ```
-## 3. Example
+## 3. RestAPI Example
 ### a. Get a single item successful
 ```shell
 curl -i -X GET "http://localhost:8080/api/v1/item/1"
@@ -97,7 +97,7 @@ curl -i -X PATCH 'localhost:8080/api/v1/item/1' \
 ```
 
 
-### e. Create a new item or Update if exist
+### e. Create a new item or update if exist
 HTTP Method: Put
 HTTP Success Response Code: 200 or 204
 
@@ -115,9 +115,5 @@ Http Method: Delete
 HTTP Success Response Code: 200 or 204
 
 ```shell
-curl -i -X DELETE 'localhost:8080/api/v1/item/1' \
--H "Content-Type: application/json" \
--d '{  
-  "name": "Update Example Item"  
-}'
+curl -i -X DELETE 'localhost:8080/api/v1/item/1'
 ```
