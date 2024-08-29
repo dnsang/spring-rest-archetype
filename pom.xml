@@ -4,7 +4,7 @@
 
   <groupId>dev.sang.archetype</groupId>
   <artifactId>spring-rest-archetype</artifactId>
-  <version>0.1.1</version>
+  <version>0.1.2</version>
   <packaging>maven-archetype</packaging>
 
   <name>spring-rest-archetype</name>
