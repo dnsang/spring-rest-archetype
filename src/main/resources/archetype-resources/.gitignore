@@ -4,6 +4,8 @@ target/
 !**/src/main/**/target/
 !**/src/test/**/target/
 logs/
+dist/
+dist
 
 ### MacOS/Linux/OS Related ###
 .DS_Store
@@ -23,6 +25,7 @@ logs/
 *.iws
 *.iml
 *.ipr
+.idea/
 
 ### NetBeans ###
 /nbproject/private/
